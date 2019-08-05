@@ -378,6 +378,7 @@ class WorkContext(object):
         component_classes = self._lookup_components(
             usage=usage, model_name=model_name
         )
+        save_component_classes = component_classes
         if not component_classes:
             raise NoComponentError(
                 "No component found for collection '%s', "
@@ -390,6 +391,10 @@ class WorkContext(object):
             component_classes = [
                 c for c in component_classes
                 if c._collection == self.collection._name]
+        # If the previous match (based on collection) remove every components,
+        # we have to restore it because maybe the filter based on
+        # apply_models could match
+        component_classes = component_classes or save_component_classes
         if len(component_classes) > 1:
             # ... or try to find the one specifically linked to the model
             component_classes = [
@@ -632,15 +637,19 @@ class AbstractComponent(object):
     _abstract = True
 
     # used for inheritance
-    _name = None
+    _name = None  #: Name of the component
+
+    #: Name or list of names of the component(s) to inherit from
     _inherit = None
 
-    # name of the collection to subscribe in
+    #: name of the collection to subscribe in
     _collection = None
 
-    # None means any Model, can be a list ['res.users', ...]
+    #: List of models on which the component can be applied.
+    #: None means any Model, can be a list ['res.users', ...]
     _apply_on = None
-    # component purpose ('import.mapper', ...)
+
+    #: Component purpose ('import.mapper', ...).
     _usage = None
 
     def __init__(self, work_context):
