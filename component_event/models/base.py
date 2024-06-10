@@ -67,15 +67,19 @@ class Base(models.AbstractModel):
             "components_registry", components_registry
         )
         comp_registry = components_registry or _component_databases.get(dbname)
-        if not comp_registry or not comp_registry.ready:
-            # No event should be triggered before the registry has been loaded
-            # This is a very special case, when the odoo registry is being
-            # built, it calls odoo.modules.loading.load_modules().
-            # This function might trigger events (by writing on records, ...).
-            # But at this point, the component registry is not guaranteed
-            # to be ready, and anyway we should probably not trigger events
-            # during the initialization. Hence we return an empty list of
-            # events, the 'notify' calls will do nothing.
+        try:
+            if not comp_registry or not comp_registry.ready:
+                # No event should be triggered before the registry has been loaded
+                # This is a very special case, when the odoo registry is being
+                # built, it calls odoo.modules.loading.load_modules().
+                # This function might trigger events (by writing on records, ...).
+                # But at this point, the component registry is not guaranteed
+                # to be ready, and anyway we should probably not trigger events
+                # during the initialization. Hence we return an empty list of
+                # events, the 'notify' calls will do nothing.
+                return CollectedEvents([])
+        # comp_registry can be dict, so it won't have `ready` attribute..
+        except AttributeError:
             return CollectedEvents([])
         if not comp_registry.get("base.event.collecter"):
             return CollectedEvents([])
