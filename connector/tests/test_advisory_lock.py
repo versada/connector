@@ -23,7 +23,7 @@ class TestAdvisoryLock(TransactionComponentCase):
         @self.addCleanup
         def reset_cr2():
             # rollback and close the cursor, and reset the environments
-            self.env2.reset()
+            self.env2.transaction.reset()
             self.cr2.rollback()
             self.cr2.close()
 
