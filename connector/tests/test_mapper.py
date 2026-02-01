@@ -113,7 +113,6 @@ class TestMapper(TransactionComponentRegistryCase):
             def name(self):
                 pass
 
-        # pylint: disable=R7980
         class FryMapperInherit(Component):
             _inherit = "fry.mapper"
 
@@ -682,7 +681,7 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
         partner = self.env.ref("base.res_partner_address_4")
         mapper = self.comp_registry["my.mapper"](self.work)
         map_record = mapper.map_record(partner)
-        expected = {"parent_name": "Deco Addict"}
+        expected = {"parent_name": "Acme Corporation"}
         self.assertEqual(map_record.values(), expected)
         self.assertEqual(map_record.values(for_create=True), expected)
 
