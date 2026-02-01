@@ -2,3 +2,4 @@
 - Laurent Mignon \<<laurent.mignon@acsone.eu>\>
 - Simone Orsi \<<simone.orsi@camptocamp.com>\>
 - Thien Vo \<<thienvh@trobz.com>\>
+- Andrius Laukavičius \<<andrius.laukavicius@versada.eu>\>

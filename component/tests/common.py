@@ -40,8 +40,10 @@ class ComponentMixin:
             current_addon = _get_addon_name(cls.__module__)
             env["component.builder"].load_components(current_addon)
             if hasattr(cls, "env"):
-                cls.env.context = dict(
-                    cls.env.context, components_registry=cls._components_registry
+                cls.env = cls.env(
+                    context=dict(
+                        cls.env.context, components_registry=cls._components_registry
+                    )
                 )
 
     # pylint: disable=W8106
@@ -76,8 +78,10 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
         common.TransactionCase.setUp(self)
         ComponentMixin.setUp(self)
         # There's no env on setUpClass of TransactionCase, must do it here.
-        self.env.context = dict(
-            self.env.context, components_registry=self._components_registry
+        self.env = self.env(
+            context=dict(
+                self.env.context, components_registry=self._components_registry
+            )
         )
 
 
