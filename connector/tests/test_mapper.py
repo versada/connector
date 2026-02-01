@@ -113,7 +113,6 @@ class TestMapper(TransactionComponentRegistryCase):
             def name(self):
                 pass
 
-        # pylint: disable=R7980
         class FryMapperInherit(Component):
             _inherit = "fry.mapper"
 

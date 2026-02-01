@@ -22,7 +22,6 @@ from contextlib import contextmanager
 import psycopg2
 
 import odoo
-from odoo import _
 
 from odoo.addons.component.core import AbstractComponent
 
@@ -191,14 +190,16 @@ class GenericExporter(AbstractComponent):
         if self.external_id:
             record = self._update_data(map_record, fields=fields)
             if not record:
-                return _("Nothing to export.")
+                return self.env._("Nothing to export.")
             self._update(record)
         else:
             record = self._create_data(map_record, fields=fields)
             if not record:
-                return _("Nothing to export.")
+                return self.env._("Nothing to export.")
             self.external_id = self._create(record)
-        return _("Record exported with ID %s on Backend.") % self.external_id
+        return self.env._(
+            "Record exported with ID %(ext_id)s on Backend.", ext_id=self.external_id
+        )
 
     def _after_export(self):
         """Can do several actions after exporting a record on the backend"""
